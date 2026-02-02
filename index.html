@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UMKM Sembako - Sistem Kasir Toko Kelontong</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="store-info">
+                <div class="store-logo">
+                    <i class="fas fa-store-alt"></i>
+                </div>
+                <div class="store-details">
+                    <h1 class="store-name" id="store-name">TOKO SEMBAKO MAKMUR</h1>
+                    <p class="store-address" id="store-address">Jl. Raya No. 123, Desa Sejahtera</p>
+                    <p class="store-phone" id="store-phone">📞 0812-3456-7890</p>
+                </div>
+            </div>
+            
+            <div class="header-controls">
+                <div class="datetime-display">
+                    <div class="date" id="current-date">Senin, 1 Januari 2024</div>
+                    <div class="time" id="current-time">00:00:00</div>
+                </div>
+                
+                <div class="quick-actions">
+                    <button class="btn-action" id="btn-new-transaction">
+                        <i class="fas fa-receipt"></i>
+                        <span>Transaksi Baru</span>
+                    </button>
+                    <button class="btn-action" id="btn-print-receipt">
+                        <i class="fas fa-print"></i>
+                        <span>Cetak Struk</span>
+                    </button>
+                    <button class="btn-action" id="btn-daily-report">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Laporan</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        <!-- Left Panel: Product Selection -->
+        <section class="left-panel">
+            <!-- Category Filter -->
+            <div class="category-filter">
+                <h3><i class="fas fa-filter"></i> KATEGORI SEMBAKO</h3>
+                <div class="category-buttons" id="category-buttons">
+                    <!-- Categories will be loaded by JavaScript -->
+                </div>
+                
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="product-search" placeholder="Cari produk sembako...">
+                </div>
+            </div>
+            
+            <!-- Products Grid -->
+            <div class="products-section">
+                <h3><i class="fas fa-shopping-basket"></i> DAFTAR PRODUK</h3>
+                <div class="products-grid" id="products-grid">
+                    <!-- Products will be loaded by JavaScript -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Right Panel: Transaction -->
+        <section class="right-panel">
+            <!-- Transaction Header -->
+            <div class="transaction-header">
+                <h2><i class="fas fa-cash-register"></i> KASIR</h2>
+                <div class="transaction-info">
+                    <div class="trans-number">
+                        <span>No. Transaksi:</span>
+                        <strong id="transaction-number">TRX-20240101-001</strong>
+                    </div>
+                    <div class="cashier-name">
+                        <span>Kasir:</span>
+                        <strong id="cashier-name">Budi (Pemilik)</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Transaction Items -->
+            <div class="transaction-items-container">
+                <div class="table-header">
+                    <div class="col-product">PRODUK</div>
+                    <div class="col-qty">QTY</div>
+                    <div class="col-price">HARGA</div>
+                    <div class="col-total">TOTAL</div>
+                    <div class="col-action">AKSI</div>
+                </div>
+                
+                <div class="transaction-items" id="transaction-items">
+                    <!-- Transaction items will be loaded here -->
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>Belum ada barang di keranjang</p>
+                        <small>Pilih produk dari daftar sebelah kiri</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Transaction Summary -->
+            <div class="transaction-summary">
+                <div class="summary-row">
+                    <span>Jumlah Item:</span>
+                    <span id="total-items">0</span>
+                </div>
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="subtotal">Rp 0</span>
+                </div>
+                <div class="summary-row discount">
+                    <span>Diskon:</span>
+                    <div class="discount-control">
+                        <button class="discount-btn" id="discount-minus">-</button>
+                        <input type="number" id="discount-input" value="0" min="0" max="100">
+                        <span>%</span>
+                        <button class="discount-btn" id="discount-plus">+</button>
+                    </div>
+                    <span id="discount-amount">Rp 0</span>
+                </div>
+                <div class="summary-row">
+                    <span>PPN (10%):</span>
+                    <span id="tax-amount">Rp 0</span>
+                </div>
+                <div class="summary-row grand-total">
+                    <span>TOTAL BAYAR:</span>
+                    <span id="grand-total">Rp 0</span>
+                </div>
+                
+                <!-- Payment Section -->
+                <div class="payment-section">
+                    <div class="payment-input">
+                        <label for="cash-received"><i class="fas fa-money-bill-wave"></i> UANG DITERIMA:</label>
+                        <input type="number" id="cash-received" placeholder="Masukkan jumlah uang">
+                    </div>
+                    <div class="payment-change">
+                        <span>KEMBALIAN:</span>
+                        <span id="change-amount">Rp 0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn-primary" id="btn-process-payment">
+                    <i class="fas fa-check-circle"></i> PROSES PEMBAYARAN
+                </button>
+                <button class="btn-secondary" id="btn-save-transaction">
+                    <i class="fas fa-save"></i> SIMPAN TRANSAKSI
+                </button>
+                <button class="btn-danger" id="btn-cancel-transaction">
+                    <i class="fas fa-times-circle"></i> BATAL
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" data-section="products">
+            <i class="fas fa-boxes"></i>
+            <span>Produk</span>
+        </a>
+        <a href="#" class="nav-item" data-section="transaction">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Transaksi</span>
+            <span class="nav-badge" id="cart-badge">0</span>
+        </a>
+        <a href="#" class="nav-item" data-section="inventory">
+            <i class="fas fa-warehouse"></i>
+            <span>Stok</span>
+        </a>
+        <a href="#" class="nav-item" data-section="reports">
+            <i class="fas fa-chart-line"></i>
+            <span>Laporan</span>
+        </a>
+        <a href="#" class="nav-item" data-section="settings">
+            <i class="fas fa-cog"></i>
+            <span>Pengaturan</span>
+        </a>
+    </nav>
+
+    <!-- Modals -->
+    <div class="modal" id="product-detail-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-product-name">Detail Produk</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="product-detail-view">
+                    <div class="product-image-large">
+                        <img id="modal-product-image" src="" alt="">
+                    </div>
+                    <div class="product-detail-info">
+                        <div class="detail-row">
+                            <span class="label">Kode Produk:</span>
+                            <span id="modal-product-code">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Kategori:</span>
+                            <span id="modal-product-category">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Stok:</span>
+                            <span id="modal-product-stock">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Harga Satuan:</span>
+                            <span id="modal-product-price" class="price">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Satuan:</span>
+                            <span id="modal-product-unit">-</span>
+                        </div>
+                        <div class="quantity-selector">
+                            <label for="modal-quantity">Jumlah:</label>
+                            <div class="quantity-controls">
+                                <button class="qty-btn minus">-</button>
+                                <input type="number" id="modal-quantity" value="1" min="1" max="100">
+                                <button class="qty-btn plus">+</button>
+                                <span class="unit-label" id="modal-unit-label">pcs</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary close-modal">Batal</button>
+                <button class="btn-primary" id="btn-add-to-cart-modal">
+                    <i class="fas fa-cart-plus"></i> Tambah ke Transaksi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receipt Modal -->
+    <div class="modal" id="receipt-modal">
+        <div class="modal-content receipt-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-receipt"></i> STRUK PEMBAYARAN</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="receipt" id="receipt-content">
+                    <!-- Receipt will be generated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="btn-close-receipt">Tutup</button>
+                <button class="btn-primary" id="btn-print-receipt-modal">
+                    <i class="fas fa-print"></i> Cetak Struk
+                </button>
+                <button class="btn-secondary" id="btn-send-whatsapp">
+                    <i class="fab fa-whatsapp"></i> Kirim WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div class="modal" id="report-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-chart-bar"></i> LAPORAN HARIAN</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="report-content" id="report-content">
+                    <!-- Report will be generated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary close-modal">Tutup</button>
+                <button class="btn-primary" id="btn-export-report">
+                    <i class="fas fa-file-export"></i> Export ke Excel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settings-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-cog"></i> PENGATURAN TOKO</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-form">
+                    <div class="form-group">
+                        <label for="setting-store-name">Nama Toko:</label>
+                        <input type="text" id="setting-store-name" value="TOKO SEMBAKO MAKMUR">
+                    </div>
+                    <div class="form-group">
+                        <label for="setting-store-address">Alamat:</label>
+                        <textarea id="setting-store-address" rows="2">Jl. Raya No. 123, Desa Sejahtera</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="setting-store-phone">Telepon:</label>
+                        <input type="text" id="setting-store-phone" value="0812-3456-7890">
+                    </div>
+                    <div class="form-group">
+                        <label for="setting-tax-rate">PPN (%):</label>
+                        <input type="number" id="setting-tax-rate" value="10" min="0" max="20">
+                    </div>
+                    <div class="form-group">
+                        <label for="setting-receipt-footer">Footer Struk:</label>
+                        <textarea id="setting-receipt-footer" rows="3">Terima kasih telah berbelanja!
+Barang yang sudah dibeli tidak dapat ditukar/dikembalikan.</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary close-modal">Batal</button>
+                <button class="btn-primary" id="btn-save-settings">
+                    <i class="fas fa-save"></i> Simpan Pengaturan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
